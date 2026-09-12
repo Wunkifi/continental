@@ -515,7 +515,7 @@ var draft = {
   preset:"clasico",
   values:Object.assign({}, DEFAULT_VALUES)
 };
-var sheetRound = 0, openCalc = 0;
+var sheetRound = 0, openCalc = -1;
 
 function blankScores(nR, nP){
   var a = [], i, j, row;
@@ -966,11 +966,11 @@ function renderGame(){
 /* =============================================================
    Anotación
 ============================================================= */
-function openScore(r){ sheetRound = r; openCalc = 0; renderEntries(); openSheet($("sheetScore")); }
+function openScore(r){ sheetRound = r; openCalc = -1; renderEntries(); openSheet($("sheetScore")); }
 function renderEntries(){
   var r = state.rounds[sheetRound];
   $("scoreTitle").textContent = "Ronda " + (sheetRound + 1) + " · " + contractName(r);
-  $("scoreHint").innerHTML = "Suma las cartas que le quedaron en la mano a cada uno. Quien se fue a cero cierra la ronda — déjalo en <b>0</b>.";
+  $("scoreHint").innerHTML = "Escribe los puntos de cada jugador como los contéis en vuestra mesa. Si te viene bien, <b>sumar cartas</b> va sumando por valor.";
   var host = $("entries");
   host.innerHTML = "";
   state.players.forEach(function(name, i){
