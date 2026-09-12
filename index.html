@@ -1,0 +1,1323 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08201A">
+<title>Mesa de Continental</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🃏</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,500;6..96,700&display=swap">
+<style>
+:root{
+  --paper:#EDF0EA;
+  --surface:#FFFFFF;
+  --surface-2:#E3E9E1;
+  --ink:#12211C;
+  --ink-2:#46564F;
+  --muted:#78887F;
+  --line:#D3DBD2;
+  --line-strong:#BCC7BA;
+  --accent:#C0102A;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#F8E3E5;
+  --brass:#9A6F14;
+  --brass-soft:#F3E9CE;
+  --live:#177A4C;
+  --live-soft:#DCEFE3;
+  --warn:#8A5A05;
+  --warn-soft:#F6EAD4;
+  --shadow:0 1px 2px rgba(18,33,28,.06), 0 8px 24px -12px rgba(18,33,28,.28);
+  --radius:14px;
+  --display:"Bodoni Moda","Didot",Georgia,serif;
+  --ui:"Archivo","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#08201A; --surface:#0E2C24; --surface-2:#12392E;
+    --ink:#E9EFE9; --ink-2:#A8BDB3; --muted:#7A9489;
+    --line:#1B463A; --line-strong:#2A5B4B;
+    --accent:#EF6A63; --accent-ink:#2A0A0C; --accent-soft:#3A191A;
+    --brass:#DCB75C; --brass-soft:#3A2F12;
+    --live:#5CD094; --live-soft:#10392A;
+    --warn:#E0B057; --warn-soft:#3A2E12;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#08201A; --surface:#0E2C24; --surface-2:#12392E;
+  --ink:#E9EFE9; --ink-2:#A8BDB3; --muted:#7A9489;
+  --line:#1B463A; --line-strong:#2A5B4B;
+  --accent:#EF6A63; --accent-ink:#2A0A0C; --accent-soft:#3A191A;
+  --brass:#DCB75C; --brass-soft:#3A2F12;
+  --live:#5CD094; --live-soft:#10392A;
+  --warn:#E0B057; --warn-soft:#3A2E12;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{margin:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--ui); font-size:16px; line-height:1.45;
+  -webkit-text-size-adjust:100%;
+  padding-bottom:calc(96px + env(safe-area-inset-bottom));
+}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+h1,h2,h3{margin:0;text-wrap:balance}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+
+/* ---------- topbar ---------- */
+.topbar{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;gap:10px;min-height:56px}
+.brand{display:flex;flex-direction:column;margin-right:auto;min-width:0}
+.brand .mark{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.01em;line-height:1.1}
+.brand .sub{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.iconbtn{background:none;border:1px solid var(--line);border-radius:10px;padding:7px 11px;
+  font-size:12px;font-weight:600;color:var(--ink-2);letter-spacing:.02em;white-space:nowrap}
+.iconbtn:hover{border-color:var(--line-strong);color:var(--ink)}
+
+.pill{
+  display:inline-flex;align-items:center;gap:7px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface);
+  padding:6px 11px 6px 9px;font-size:12.5px;font-weight:700;
+  letter-spacing:.03em;white-space:nowrap;color:var(--ink-2);
+}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex:0 0 auto}
+.pill.live{background:var(--live-soft);border-color:transparent;color:var(--live)}
+.pill.live .dot{background:var(--live);animation:beat 2.4s ease-in-out infinite}
+.pill.warnst{background:var(--warn-soft);border-color:transparent;color:var(--warn)}
+.pill.warnst .dot{background:var(--warn)}
+@keyframes beat{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion: reduce){.pill.live .dot{animation:none}}
+.code{font-family:var(--display);font-weight:700;letter-spacing:.06em}
+
+/* ---------- generic ---------- */
+.eyebrow{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.17em;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;align-items:center;gap:10px}
+.btn{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);
+  border-radius:11px;padding:11px 16px;font-weight:600;font-size:15px}
+.btn:hover{border-color:var(--ink-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+.btn.ghost:hover{color:var(--accent)}
+.btn.wide{width:100%}
+.btn.danger{color:var(--accent);border-color:var(--line)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+input[type=text],input[type=number]{background:var(--paper);border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;width:100%}
+input[type=number]{font-variant-numeric:tabular-nums}
+input:focus{border-color:var(--ink-2);outline:none}
+
+/* ---------- contract glyphs ---------- */
+.glyphs{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.gset{display:flex;gap:2px}
+.mc{width:15px;height:21px;border-radius:2.5px;border:1px solid var(--line-strong);
+  background:var(--surface);display:grid;place-items:center;
+  font-family:var(--display);font-weight:700;font-size:10px;line-height:1;color:var(--ink-2)}
+.gset.esc .mc{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 38%,var(--line))}
+.gset.esc .mc:nth-child(1){transform:translateY(2px)}
+.gset.esc .mc:nth-child(2){transform:translateY(1px)}
+
+/* ---------- round head ---------- */
+.roundhead{padding:16px;display:flex;flex-direction:column;gap:12px}
+.roundhead .top{display:flex;align-items:flex-start;gap:12px}
+.rnum{font-family:var(--display);font-weight:700;font-size:40px;line-height:.9;letter-spacing:-.02em}
+.rnum small{font-size:15px;color:var(--muted);font-weight:500}
+.contract{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.facts{display:flex;flex-wrap:wrap;gap:6px}
+.fact{font-size:12px;font-weight:600;padding:4px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2)}
+.fact b{color:var(--ink);font-weight:700}
+.fact.brass{background:var(--brass-soft);color:var(--brass)}
+.fact.brass b{color:var(--brass)}
+
+/* ---------- board ---------- */
+.board{overflow:hidden}
+.prow{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:12px;
+  padding:12px 16px;border-top:1px solid var(--line);width:100%;text-align:left;
+  background:none;border-left:0;border-right:0;border-bottom:0}
+.prow:first-child{border-top:0}
+.prow:hover{background:var(--surface-2)}
+.pos{font-family:var(--display);font-size:15px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.prow.lead .pos{color:var(--brass)}
+.pname{font-weight:600;font-size:16px;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pmeta{font-size:11.5px;color:var(--muted);margin-top:1px;font-variant-numeric:tabular-nums}
+.ptotal{font-family:var(--display);font-weight:700;font-size:30px;line-height:1;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.prow.lead .ptotal{color:var(--brass)}
+.dealerdot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);
+  vertical-align:middle;margin-right:5px}
+
+/* ---------- strip ---------- */
+.strip{display:flex;gap:6px;overflow-x:auto;padding:2px 16px 14px}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:9px;
+  padding:7px 10px;min-width:52px;text-align:center}
+.chip .k{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.chip .v{font-family:var(--display);font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.chip.done{background:var(--surface-2)}
+.chip.now{border-color:var(--accent);background:var(--accent-soft)}
+.chip.now .k{color:var(--accent)}
+
+/* ---------- dock ---------- */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:25;
+  background:linear-gradient(to top,var(--paper) 62%,transparent);
+  padding:14px 0 calc(16px + env(safe-area-inset-bottom))}
+.dock .wrap{display:flex;gap:10px}
+.dock .btn{flex:1}
+
+/* ---------- sheets ---------- */
+.sheet-wrap{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.scrim{position:absolute;inset:0;background:rgba(6,20,16,.5);border:0;width:100%}
+.sheet{position:relative;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;
+  background:var(--paper);border:1px solid var(--line);border-radius:18px 18px 0 0;
+  box-shadow:var(--shadow);animation:rise .22s ease-out}
+@keyframes rise{from{transform:translateY(14px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){.sheet{animation:none}}
+.sheet-head{position:sticky;top:0;background:var(--paper);z-index:2;padding:16px 16px 12px;
+  border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.sheet-head h2{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-right:auto}
+.sheet-body{padding:16px}
+.sheet-foot{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line);
+  padding:12px 16px calc(16px + env(safe-area-inset-bottom));display:flex;gap:10px}
+.sheet-foot .btn{flex:1}
+
+/* ---------- entry ---------- */
+.entry{border-top:1px solid var(--line)}
+.entry:first-child{border-top:0}
+.entry-main{display:grid;grid-template-columns:1fr 96px;gap:10px;align-items:center;padding:10px 0}
+.entry-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.entry-sub{display:flex;gap:10px;align-items:center;margin-top:3px}
+.linky{background:none;border:0;padding:0;font-size:11.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted)}
+.linky:hover{color:var(--accent)}
+.linky[aria-pressed="true"]{color:var(--accent)}
+.entry input[type=number]{text-align:right;font-family:var(--display);font-weight:700;font-size:22px;padding:6px 10px}
+.calc{display:flex;flex-wrap:wrap;gap:6px;padding:0 0 12px}
+.calc button{border:1px solid var(--line-strong);background:var(--surface);border-radius:9px;
+  padding:8px 10px;font-size:13px;font-weight:600}
+.calc button:hover{border-color:var(--accent);color:var(--accent)}
+.calc button b{font-family:var(--display);font-variant-numeric:tabular-nums}
+.calc .clear{color:var(--muted);border-style:dashed}
+.sumline{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0 2px;
+  font-size:13px;color:var(--muted)}
+.sumline b{font-family:var(--display);font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ---------- settings ---------- */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--ink-2)}
+.hint{font-size:12.5px;color:var(--muted);line-height:1.5}
+.plist{display:flex;flex-direction:column;gap:8px}
+.pitem{display:grid;grid-template-columns:22px 1fr 40px;gap:8px;align-items:center}
+.pitem .n{font-family:var(--display);color:var(--muted);font-size:14px;text-align:center}
+.pitem .rm{border:1px solid var(--line);background:none;border-radius:9px;padding:9px 0;color:var(--muted);font-size:15px}
+.pitem .rm:hover{color:var(--accent);border-color:var(--accent)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1px solid var(--line);background:var(--surface);border-radius:10px;
+  padding:9px 12px;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.vals{display:grid;grid-template-columns:1fr 84px;gap:8px 10px;align-items:center}
+.vals span{font-size:14px}
+.rlist{display:flex;flex-direction:column;gap:8px}
+.redit{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;
+  border:1px solid var(--line);border-radius:11px;padding:9px 11px;background:var(--surface)}
+.redit .n{font-family:var(--display);color:var(--muted);font-size:14px;text-align:center}
+.stepper{display:flex;align-items:center;gap:4px}
+.stepper button{width:28px;height:28px;border:1px solid var(--line);background:var(--paper);
+  border-radius:8px;font-weight:700;line-height:1;color:var(--ink-2)}
+.stepper button:hover{color:var(--accent);border-color:var(--accent)}
+.stepper .lab{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);width:26px}
+.stepper .num{font-family:var(--display);font-weight:700;width:14px;text-align:center;font-variant-numeric:tabular-nums}
+
+/* ---------- share ---------- */
+.roomcode{
+  display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 16px;
+  background:var(--live-soft);border-radius:var(--radius);
+}
+.roomcode .big{font-family:var(--display);font-weight:700;font-size:46px;line-height:1;
+  letter-spacing:.14em;color:var(--live);padding-left:.14em}
+.roomcode .cap{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--live);opacity:.8}
+.qrbox{display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+.qrbox canvas{width:216px;height:216px;background:#fff;padding:10px;border-radius:10px}
+.linkbox{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:var(--muted);
+  word-break:break-all;max-height:56px;overflow:hidden;background:var(--surface-2);
+  padding:9px 11px;border-radius:9px}
+.peers{display:flex;flex-wrap:wrap;gap:6px}
+.peer{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;
+  background:var(--surface-2);color:var(--ink-2)}
+.peer.me{background:var(--live-soft);color:var(--live)}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:80;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;
+  font-size:13.5px;font-weight:600;box-shadow:var(--shadow);max-width:90vw;text-align:center}
+
+/* ---------- setup / lobby ---------- */
+.hero{padding:26px 0 18px}
+.hero h1{font-family:var(--display);font-weight:700;font-size:38px;line-height:1;
+  letter-spacing:-.025em;margin-bottom:8px}
+.hero p{margin:0;color:var(--ink-2);font-size:14.5px;max-width:44ch}
+.sect{padding:16px}
+.sect + .sect{border-top:1px solid var(--line)}
+.joinbar{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.joinbar input{text-transform:uppercase;font-family:var(--display);font-weight:700;
+  font-size:20px;letter-spacing:.18em;text-align:center}
+details.rules{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+details.rules summary{padding:13px 16px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:8px}
+details.rules summary::-webkit-details-marker{display:none}
+details.rules summary::after{content:"+";margin-left:auto;color:var(--muted);font-size:18px;line-height:1}
+details.rules[open] summary::after{content:"–"}
+details.rules .body{padding:0 16px 16px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.lobby{padding:56px 0;text-align:center}
+.lobby .big{font-family:var(--display);font-weight:700;font-size:46px;letter-spacing:.14em;
+  color:var(--ink);padding-left:.14em;line-height:1}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <span class="mark">Continental</span>
+      <span class="sub" id="brandSub">marcador de mesa</span>
+    </div>
+    <button class="pill" id="btnStatus"><span class="dot"></span><span id="statusText">local</span></button>
+    <button class="iconbtn" id="btnSettings" hidden>Ajustes</button>
+  </div>
+</header>
+
+<main>
+  <!-- ===== SETUP ===== -->
+  <section id="setup" class="wrap">
+    <div class="hero">
+      <h1>Una mesa, todos&nbsp;los móviles</h1>
+      <p>Crea la partida y comparte el código. Cada móvil ve el marcador en vivo: anote quien anote, se actualiza en todos.</p>
+    </div>
+
+    <div class="stack">
+      <div class="card sect">
+        <div class="eyebrow" style="margin-bottom:10px">Entrar a una mesa</div>
+        <div class="joinbar">
+          <input type="text" id="joinCode" maxlength="5" placeholder="CÓDIGO" autocomplete="off"
+                 autocapitalize="characters" spellcheck="false">
+          <button class="btn" id="btnJoin">Entrar</button>
+        </div>
+        <p class="hint" style="margin:10px 0 0">Si alguien ya creó la partida, te basta con su código de cinco letras.</p>
+      </div>
+
+      <div class="card">
+        <div class="sect">
+          <div class="eyebrow" style="margin-bottom:10px">Jugadores</div>
+          <div class="plist" id="setupPlayers"></div>
+          <button class="btn wide ghost" id="addPlayer" style="margin-top:10px">+ Añadir jugador</button>
+          <p class="hint" id="deckHint" style="margin:12px 0 0"></p>
+        </div>
+        <div class="sect">
+          <div class="eyebrow" style="margin-bottom:10px">Rondas</div>
+          <div class="seg" id="presetSeg">
+            <button type="button" data-preset="clasico" aria-pressed="true">Clásico · 7 rondas</button>
+            <button type="button" data-preset="largo" aria-pressed="false">Largo · 11 rondas</button>
+          </div>
+          <div class="rlist" id="setupRounds" style="margin-top:12px"></div>
+          <button class="btn wide ghost" id="addRound" style="margin-top:8px">+ Añadir ronda</button>
+          <p class="hint" style="margin:10px 0 0">Cada ronda reparte una carta más de las que necesitas para bajarte: 3 por trío, 4 por escalera, +1.</p>
+        </div>
+      </div>
+
+      <details class="rules">
+        <summary>Valores de las cartas</summary>
+        <div class="body">
+          <p style="margin:0">Al cerrar la ronda cada jugador suma los puntos que le quedaron en la mano. Ajusta los valores si en tu mesa se juega distinto.</p>
+          <div class="vals" id="setupValues" style="margin-top:12px"></div>
+        </div>
+      </details>
+
+      <button class="btn primary wide" id="startGame" style="padding:15px">Crear partida y abrir mesa</button>
+    </div>
+  </section>
+
+  <!-- ===== LOBBY (entrando a una sala) ===== -->
+  <section id="lobby" class="wrap" hidden>
+    <div class="lobby">
+      <div class="eyebrow" style="margin-bottom:12px">Entrando a la mesa</div>
+      <div class="big" id="lobbyCode">·····</div>
+      <p class="hint" id="lobbyMsg" style="margin:16px auto 0;max-width:30ch">Buscando la partida…</p>
+      <div class="stack" style="margin-top:24px">
+        <button class="btn wide" id="lobbyCreate" hidden>Crear la partida en esta sala</button>
+        <button class="btn ghost wide" id="lobbyBack">Volver</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GAME ===== -->
+  <section id="game" hidden>
+    <div class="wrap stack">
+      <div class="card">
+        <div class="roundhead">
+          <div class="top">
+            <div class="rnum" id="gRoundNum">1<small>/7</small></div>
+            <div style="flex:1;min-width:0">
+              <div class="eyebrow">Ronda en juego</div>
+              <div class="contract" id="gContract">2 tríos</div>
+              <div class="glyphs" id="gGlyphs" style="margin-top:7px"></div>
+            </div>
+          </div>
+          <div class="facts" id="gFacts"></div>
+        </div>
+      </div>
+      <div class="card board" id="gBoard"></div>
+      <div>
+        <div class="eyebrow wrap" style="padding:0 16px 8px">Rondas anotadas</div>
+        <div class="strip" id="gStrip"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="dock" id="dock" hidden>
+  <div class="wrap">
+    <button class="btn primary" id="btnScore">Anotar ronda</button>
+    <button class="btn" id="btnShare2" style="flex:0 0 auto">Compartir</button>
+  </div>
+</div>
+
+<!-- ===== SHEETS ===== -->
+<div class="sheet-wrap" id="sheetScore" hidden>
+  <button class="scrim" data-close aria-label="Cerrar"></button>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="scoreTitle">
+    <div class="sheet-head">
+      <h2 id="scoreTitle">Anotar ronda</h2>
+      <button class="iconbtn" data-close>Cerrar</button>
+    </div>
+    <div class="sheet-body">
+      <p class="hint" id="scoreHint" style="margin:0 0 12px"></p>
+      <div id="entries"></div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn ghost" data-close style="flex:0 0 auto">Cancelar</button>
+      <button class="btn primary" id="saveRound">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet-wrap" id="sheetShare" hidden>
+  <button class="scrim" data-close aria-label="Cerrar"></button>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <div class="sheet-head">
+      <h2 id="shareTitle">Compartir la mesa</h2>
+      <button class="iconbtn" data-close>Cerrar</button>
+    </div>
+    <div class="sheet-body stack">
+      <div class="roomcode" id="roomBox">
+        <span class="cap">Código de mesa</span>
+        <span class="big" id="roomBig">·····</span>
+      </div>
+      <div class="qrbox">
+        <canvas id="qr" width="216" height="216"></canvas>
+        <p class="hint" id="qrCap" style="text-align:center;margin:0">Escanea con la cámara y entras directo.</p>
+      </div>
+      <div class="linkbox" id="shareLink"></div>
+      <div class="row">
+        <button class="btn" id="copyLink" style="flex:1">Copiar enlace</button>
+        <button class="btn primary" id="sysShare" style="flex:1">Enviar</button>
+      </div>
+      <div>
+        <div class="eyebrow" style="margin-bottom:8px">En la mesa ahora</div>
+        <div class="peers" id="peerList"></div>
+      </div>
+      <p class="hint" id="shareNote" style="margin:0"></p>
+    </div>
+  </div>
+</div>
+
+<div class="sheet-wrap" id="sheetSettings" hidden>
+  <button class="scrim" data-close aria-label="Cerrar"></button>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+    <div class="sheet-head">
+      <h2 id="setTitle">Ajustes de la partida</h2>
+      <button class="iconbtn" data-close>Cerrar</button>
+    </div>
+    <div class="sheet-body">
+      <div class="field">
+        <label for="setMyName">Cómo te ven los demás</label>
+        <input type="text" id="setMyName" autocomplete="off" placeholder="Tu nombre">
+      </div>
+      <div class="field">
+        <label for="setName">Nombre de la partida</label>
+        <input type="text" id="setName" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Jugadores</label>
+        <div class="plist" id="setPlayers"></div>
+      </div>
+      <div class="field">
+        <label>Reparte primero</label>
+        <div class="seg" id="setDealer"></div>
+      </div>
+      <div class="field">
+        <label>Valores de las cartas</label>
+        <div class="vals" id="setValues"></div>
+      </div>
+      <div class="field">
+        <label>Rondas</label>
+        <div class="rlist" id="setRounds"></div>
+        <button class="btn wide ghost" id="setAddRound" style="margin-top:8px">+ Añadir ronda</button>
+      </div>
+      <div class="row" style="margin-top:20px;gap:8px">
+        <button class="btn danger" id="resetScores" style="flex:1">Borrar puntos</button>
+        <button class="btn danger" id="newGame" style="flex:1">Salir de la mesa</button>
+      </div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn primary" data-close>Listo</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* =============================================================
+   Reglas del contrato
+============================================================= */
+var PRESETS = {
+  clasico: [[2,0],[1,1],[0,2],[3,0],[2,1],[1,2],[0,3]],
+  largo:   [[2,0],[1,1],[0,2],[3,0],[2,1],[1,2],[0,3],[3,1],[2,2],[1,3],[0,4]]
+};
+function mkRounds(k){ return PRESETS[k].map(function(p){ return {t:p[0], e:p[1]}; }); }
+function cardsFor(r){ return r.t*3 + r.e*4 + 1; }
+function contractName(r){
+  var p = [];
+  if(r.t) p.push(r.t + (r.t === 1 ? " trío" : " tríos"));
+  if(r.e) p.push(r.e + (r.e === 1 ? " escalera" : " escaleras"));
+  return p.join(" + ") || "libre";
+}
+function decksFor(n){ return Math.max(2, Math.ceil(n/2)); }
+var VALUE_LABELS = [["j","Comodín"],["a","As"],["two","Dos (comodín)"],["f","K · Q · J · 10"],["l","Del 3 al 9"]];
+var DEFAULT_VALUES = {j:50, a:20, two:25, f:10, l:5};
+
+/* =============================================================
+   Estado
+============================================================= */
+var state = null;
+var draft = {
+  players:["Ana","Bruno","Carla","Diego"],
+  rounds:mkRounds("clasico"),
+  preset:"clasico",
+  values:Object.assign({}, DEFAULT_VALUES)
+};
+var sheetRound = 0, openCalc = 0;
+
+function blankScores(nR, nP){
+  var a = [], i, j, row;
+  for(i = 0; i < nR; i++){ row = []; for(j = 0; j < nP; j++) row.push(null); a.push(row); }
+  return a;
+}
+function totals(){
+  return state.players.map(function(_, i){
+    return state.scores.reduce(function(s, row){ return s + (row[i] || 0); }, 0);
+  });
+}
+function roundDone(r){ return state.scores[r] && state.scores[r].every(function(v){ return v !== null; }); }
+function firstOpenRound(){
+  for(var i = 0; i < state.rounds.length; i++) if(!roundDone(i)) return i;
+  return -1;
+}
+function dealerOf(r){ return (state.dealer + r) % state.players.length; }
+function normalizeScoreRows(){
+  while(state.scores.length < state.rounds.length)
+    state.scores.push(state.players.map(function(){ return null; }));
+  state.scores.length = state.rounds.length;
+}
+function normalize(s){
+  if(!s || !s.players || !s.players.length || !s.rounds || !s.rounds.length) return null;
+  s.values = Object.assign({}, DEFAULT_VALUES, s.values || {});
+  s.dealer = s.dealer || 0;
+  s.name = s.name || "Partida";
+  s.rev = s.rev || 1;
+  s.by = s.by || "";
+  if(!s.scores || s.scores.length !== s.rounds.length) s.scores = blankScores(s.rounds.length, s.players.length);
+  s.scores = s.scores.map(function(row){
+    var r = row.slice(0, s.players.length);
+    while(r.length < s.players.length) r.push(null);
+    return r;
+  });
+  return s;
+}
+
+/* =============================================================
+   Identidad y almacenamiento local
+============================================================= */
+var ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+function roomCode(){
+  var s = "", i;
+  for(i = 0; i < 5; i++) s += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+  return s;
+}
+function rid(){ return Math.random().toString(36).slice(2, 9); }
+
+var KEY = "continental.v2";
+var me = { id:"", name:"" };
+try{
+  me.id = localStorage.getItem(KEY + ".id") || "";
+  me.name = localStorage.getItem(KEY + ".name") || "";
+}catch(e){}
+if(!me.id){ me.id = rid(); try{ localStorage.setItem(KEY + ".id", me.id); }catch(e){} }
+
+function saveLocal(){
+  try{ localStorage.setItem(KEY, JSON.stringify({room:Net.room, state:state})); }catch(e){}
+}
+function loadLocal(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(!raw) return null;
+    var o = JSON.parse(raw);
+    return {room:o.room || null, state:normalize(o.state)};
+  }catch(e){ return null; }
+}
+
+function b64e(str){
+  var b = new TextEncoder().encode(str), s = "", i;
+  for(i = 0; i < b.length; i++) s += String.fromCharCode(b[i]);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function b64d(str){
+  var s = str.replace(/-/g,"+").replace(/_/g,"/");
+  while(s.length % 4) s += "=";
+  var bin = atob(s), b = new Uint8Array(bin.length), i;
+  for(i = 0; i < bin.length; i++) b[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(b);
+}
+function baseUrl(){ return location.href.split("#")[0]; }
+function setHash(h){ try{ history.replaceState(null, "", h ? "#" + h : location.pathname + location.search); }catch(e){} }
+
+/* =============================================================
+   Red: MQTT sobre WebSocket en broker público
+   - estado  -> mensaje RETENIDO, así el que entra tarde lo recibe ya
+   - latido  -> quién está en la mesa ahora mismo
+============================================================= */
+var BROKERS = [
+  "wss://broker.emqx.io:8084/mqtt",
+  "wss://broker.hivemq.com:8884/mqtt",
+  "wss://test.mosquitto.org:8081/mqtt"
+];
+var Net = {
+  client:null, room:null, status:"off", tries:0,
+  timer:null, readyTimer:null,
+  peers:{}, hbTimer:null, pruneTimer:null,
+  onState:null, onStatus:null, onReady:null,
+
+  topic:function(sub){ return "continental/v1/" + this.room + (sub ? "/" + sub : "/state"); },
+
+  connect:function(room){
+    this.leave(true);
+    this.room = room;
+    this.tries = 0;
+    this.setStatus("connecting");
+    if(typeof mqtt === "undefined"){ this.setStatus("off"); return; }
+    this.dial();
+  },
+
+  /* Un intento por cliente. Si cae, se descarta entero y se prueba el
+     siguiente broker; nunca nos rendimos mientras haya sala. */
+  dial:function(){
+    var self = this, done = false;
+    var url = BROKERS[this.tries % BROKERS.length];
+    var c;
+
+    function down(){
+      if(done) return;
+      done = true;
+      try{ c && c.end(true); }catch(e){}
+      if(self.client === c){ self.client = null; self.retryLater(); }
+    }
+
+    try{
+      c = mqtt.connect(url, {
+        clientId:"cont_" + me.id.slice(0, 8) + "_" + rid(),
+        clean:true, keepalive:30, connectTimeout:8000, reconnectPeriod:0
+      });
+    }catch(e){ this.retryLater(); return; }
+    this.client = c;
+
+    c.on("connect", function(){
+      if(self.client !== c){ try{ c.end(true); }catch(e){} return; }
+      c.subscribe([self.topic(), self.topic("hb")], {qos:0}, function(err){
+        if(err){ down(); return; }
+        self.tries = 0;
+        self.setStatus("live");
+        self.beat();
+        if(!self.hbTimer) self.hbTimer = setInterval(function(){ self.beat(); }, 4000);
+        if(!self.pruneTimer) self.pruneTimer = setInterval(function(){ self.prune(); }, 3000);
+        clearTimeout(self.readyTimer);
+        self.readyTimer = setTimeout(function(){ if(self.onReady) self.onReady(); }, 1500);
+      });
+    });
+
+    c.on("message", function(topic, payload){
+      if(self.client !== c) return;
+      var msg;
+      try{ msg = JSON.parse(payload.toString()); }catch(e){ return; }
+      if(!msg) return;
+      if(topic === self.topic("hb")){
+        if(msg.id && msg.id !== me.id){
+          self.peers[msg.id] = {name:msg.name || "alguien", seen:Date.now()};
+          if(self.onStatus) self.onStatus();
+        }
+        return;
+      }
+      if(self.onState) self.onState(msg);
+    });
+
+    c.on("error", down);
+    c.on("close", down);
+    c.on("offline", down);
+  },
+
+  retryLater:function(){
+    var self = this;
+    if(!this.room) return;
+    this.peers = {};
+    this.tries++;
+    this.setStatus(this.tries > BROKERS.length ? "down" : "connecting");
+    clearTimeout(this.timer);
+    this.timer = setTimeout(function(){ self.dial(); }, Math.min(800 * this.tries, 6000));
+  },
+
+  beat:function(){
+    if(!this.client || !this.client.connected) return;
+    try{
+      this.client.publish(this.topic("hb"),
+        JSON.stringify({id:me.id, name:me.name || "invitado", t:Date.now()}), {qos:0});
+    }catch(e){}
+  },
+
+  prune:function(){
+    var now = Date.now(), changed = false, k;
+    for(k in this.peers){
+      if(now - this.peers[k].seen > 14000){ delete this.peers[k]; changed = true; }
+    }
+    if(changed && this.onStatus) this.onStatus();
+  },
+
+  push:function(s){
+    if(!this.client || !this.client.connected) return;
+    try{ this.client.publish(this.topic(), JSON.stringify(s), {qos:0, retain:true}); }catch(e){}
+  },
+
+  clearRetained:function(){
+    if(!this.client || !this.client.connected) return;
+    try{ this.client.publish(this.topic(), "", {qos:0, retain:true}); }catch(e){}
+  },
+
+  leave:function(quiet){
+    clearTimeout(this.timer); clearTimeout(this.readyTimer);
+    if(this.hbTimer){ clearInterval(this.hbTimer); this.hbTimer = null; }
+    if(this.pruneTimer){ clearInterval(this.pruneTimer); this.pruneTimer = null; }
+    if(this.client){ try{ this.client.end(true); }catch(e){} this.client = null; }
+    this.room = null; this.peers = {};
+    if(!quiet) this.setStatus("off");
+  },
+
+  setStatus:function(s){ this.status = s; if(this.onStatus) this.onStatus(); },
+  count:function(){ return Object.keys(this.peers).length + 1; }
+};
+
+/* Publica el estado local como la versión más nueva de la mesa. */
+function commit(who){
+  if(!state) return;
+  state.rev = (state.rev || 0) + 1;
+  state.by = me.id;
+  state.byName = who || me.name || "";
+  state.at = Date.now();
+  saveLocal();
+  Net.push(state);
+}
+
+/* Llega un estado remoto: gana el rev más alto; empate por id. */
+Net.onState = function(msg){
+  var incoming = normalize(msg);
+  if(!incoming) return;
+  if(state){
+    if(incoming.rev < state.rev) return;
+    if(incoming.rev === state.rev && !(String(incoming.by) > String(state.by))) return;
+  }
+  var hadGame = !!state;
+  state = incoming;
+  saveLocal();
+  if(!hadGame){ showGame(); }
+  else{
+    renderGame();
+    if(!$("sheetSettings").hidden) renderSettings();
+  }
+  if(hadGame && incoming.byName && incoming.by !== me.id){
+    toast(incoming.byName + " actualizó el marcador");
+  }
+};
+Net.onStatus = function(){
+  renderStatus();
+  if(!$("sheetShare").hidden) renderPeers();
+};
+/* Al (re)conectar volvemos a sembrar nuestra copia: si la mesa estaba
+   vacía queda publicada, y si había una más nueva ya nos la trajo. */
+Net.onReady = function(){ if(state) Net.push(state); };
+
+/* =============================================================
+   DOM helpers
+============================================================= */
+function $(id){ return document.getElementById(id); }
+function el(t, c, h){ var n = document.createElement(t); if(c) n.className = c; if(h !== undefined) n.innerHTML = h; return n; }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function glyphsHtml(r){
+  var o = "", i;
+  for(i = 0; i < r.t; i++) o += '<span class="gset tri"><span class="mc">Q</span><span class="mc">Q</span><span class="mc">Q</span></span>';
+  for(i = 0; i < r.e; i++) o += '<span class="gset esc"><span class="mc">5</span><span class="mc">6</span><span class="mc">7</span><span class="mc">8</span></span>';
+  return o;
+}
+var toastTimer;
+function toast(msg){
+  var t = document.querySelector(".toast");
+  if(t) t.remove();
+  t = el("div", "toast", esc(msg));
+  document.body.appendChild(t);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.remove(); }, 2400);
+}
+function openSheet(n){ n.hidden = false; document.body.style.overflow = "hidden"; }
+function closeSheet(n){ n.hidden = true; document.body.style.overflow = ""; }
+document.addEventListener("click", function(e){
+  var b = e.target.closest("[data-close]");
+  if(b) closeSheet(b.closest(".sheet-wrap"));
+});
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape"){
+    var o = document.querySelector(".sheet-wrap:not([hidden])");
+    if(o) closeSheet(o);
+  }
+});
+
+/* =============================================================
+   Barra de estado
+============================================================= */
+function renderStatus(){
+  var pill = $("btnStatus"), txt = $("statusText");
+  pill.className = "pill";
+  if(Net.status === "live"){
+    pill.classList.add("live");
+    txt.innerHTML = '<span class="code">' + esc(Net.room) + '</span> · ' + Net.count();
+  }else if(Net.status === "connecting"){
+    txt.textContent = "conectando…";
+  }else if(Net.status === "down"){
+    pill.classList.add("warnst");
+    txt.textContent = "sin red · reintentando";
+  }else{
+    pill.classList.add("warnst");
+    txt.textContent = "sólo este móvil";
+  }
+}
+
+/* =============================================================
+   Configuración inicial
+============================================================= */
+function renderSetup(){
+  var list = $("setupPlayers");
+  list.innerHTML = "";
+  draft.players.forEach(function(name, i){
+    var item = el("div", "pitem");
+    item.appendChild(el("div", "n", String(i + 1)));
+    var inp = el("input"); inp.type = "text"; inp.value = name;
+    inp.placeholder = "Jugador " + (i + 1); inp.autocomplete = "off";
+    inp.addEventListener("input", function(){ draft.players[i] = inp.value; });
+    item.appendChild(inp);
+    var rm = el("button", "rm", "×"); rm.type = "button";
+    rm.disabled = draft.players.length <= 2;
+    rm.addEventListener("click", function(){ draft.players.splice(i, 1); renderSetup(); });
+    item.appendChild(rm);
+    list.appendChild(item);
+  });
+  var n = draft.players.length, d = decksFor(n);
+  $("deckHint").innerHTML = "Con <b>" + n + " jugadores</b> hacen falta <b>" + d +
+    " barajas</b> — " + (d * 54) + " cartas contando " + (d * 2) + " comodines.";
+  renderRoundEditor($("setupRounds"), draft.rounds, function(){
+    draft.preset = "custom"; syncPresetButtons(); renderSetup();
+  });
+  renderValueEditor($("setupValues"), draft.values, function(){});
+  syncPresetButtons();
+}
+function syncPresetButtons(){
+  Array.prototype.forEach.call($("presetSeg").children, function(b){
+    b.setAttribute("aria-pressed", String(b.dataset.preset === draft.preset));
+  });
+}
+function renderValueEditor(host, values, onChange){
+  host.innerHTML = "";
+  VALUE_LABELS.forEach(function(p){
+    host.appendChild(el("span", null, p[1]));
+    var inp = el("input"); inp.type = "number"; inp.inputMode = "numeric";
+    inp.min = "0"; inp.value = values[p[0]];
+    inp.addEventListener("input", function(){
+      values[p[0]] = parseInt(inp.value, 10) || 0; onChange();
+    });
+    host.appendChild(inp);
+  });
+}
+function renderRoundEditor(host, rounds, onChange){
+  host.innerHTML = "";
+  rounds.forEach(function(r, i){
+    var row = el("div", "redit");
+    row.appendChild(el("div", "n", String(i + 1)));
+    var mid = el("div");
+    mid.appendChild(el("div", null, '<span style="font-weight:600;font-size:14px">' + esc(contractName(r)) + '</span>'));
+    mid.appendChild(el("div", null, '<span class="pmeta">' + cardsFor(r) + " cartas</span>"));
+    row.appendChild(mid);
+    var ctrl = el("div");
+    ctrl.style.cssText = "display:flex;flex-direction:column;gap:4px";
+    [["TRÍ","t"],["ESC","e"]].forEach(function(p){
+      var st = el("div", "stepper");
+      st.appendChild(el("span", "lab", p[0]));
+      var minus = el("button", null, "−"); minus.type = "button";
+      var num = el("span", "num", String(r[p[1]]));
+      var plus = el("button", null, "+"); plus.type = "button";
+      minus.addEventListener("click", function(){ r[p[1]] = Math.max(0, r[p[1]] - 1); onChange(); });
+      plus.addEventListener("click", function(){ r[p[1]] = Math.min(6, r[p[1]] + 1); onChange(); });
+      st.appendChild(minus); st.appendChild(num); st.appendChild(plus);
+      ctrl.appendChild(st);
+    });
+    var rm = el("button", "linky", "quitar"); rm.type = "button"; rm.style.marginTop = "2px";
+    rm.addEventListener("click", function(){ if(rounds.length <= 1) return; rounds.splice(i, 1); onChange(); });
+    ctrl.appendChild(rm);
+    row.appendChild(ctrl);
+    host.appendChild(row);
+  });
+}
+
+/* =============================================================
+   Marcador
+============================================================= */
+function renderGame(){
+  var open = firstOpenRound();
+  var shown = open === -1 ? state.rounds.length - 1 : open;
+  var r = state.rounds[shown], n = state.players.length;
+
+  $("brandSub").textContent = state.name;
+  $("gRoundNum").innerHTML = (shown + 1) + "<small>/" + state.rounds.length + "</small>";
+  $("gContract").textContent = contractName(r);
+  $("gGlyphs").innerHTML = glyphsHtml(r);
+
+  var d = decksFor(n);
+  $("gFacts").innerHTML =
+    '<span class="fact"><b>' + cardsFor(r) + '</b> cartas por jugador</span>' +
+    '<span class="fact">reparte <b>' + esc(state.players[dealerOf(shown)]) + '</b></span>' +
+    '<span class="fact brass"><b>' + d + '</b> barajas · ' + (d * 2) + ' comodines</span>';
+
+  var tot = totals();
+  var order = state.players.map(function(name, i){ return {name:name, i:i, total:tot[i]}; });
+  order.sort(function(a, b){ return a.total - b.total || a.i - b.i; });
+  var anyScore = tot.some(function(v){ return v > 0; });
+
+  var board = $("gBoard");
+  board.innerHTML = "";
+  order.forEach(function(p, rank){
+    var row = el("button", "prow" + (rank === 0 && anyScore ? " lead" : ""));
+    row.type = "button";
+    row.appendChild(el("div", "pos", String(rank + 1)));
+    var mid = el("div"); mid.style.minWidth = "0";
+    mid.appendChild(el("div", "pname",
+      (dealerOf(shown) === p.i ? '<span class="dealerdot" title="reparte"></span>' : "") + esc(p.name)));
+    var played = state.scores.filter(function(w){ return w[p.i] !== null; }).length;
+    var last = null, k;
+    for(k = state.scores.length - 1; k >= 0; k--){
+      if(state.scores[k][p.i] !== null){ last = state.scores[k][p.i]; break; }
+    }
+    mid.appendChild(el("div", "pmeta", played === 0 ? "sin rondas"
+      : played + (played === 1 ? " ronda" : " rondas") + (last !== null ? " · última +" + last : "")));
+    row.appendChild(mid);
+    row.appendChild(el("div", "ptotal", String(p.total)));
+    row.addEventListener("click", function(){ openScore(shown); });
+    board.appendChild(row);
+  });
+
+  var strip = $("gStrip");
+  strip.innerHTML = "";
+  state.rounds.forEach(function(rr, i){
+    var done = roundDone(i);
+    var chip = el("button", "chip" + (done ? " done" : "") + (i === shown ? " now" : ""));
+    chip.type = "button";
+    chip.innerHTML = '<div class="k">R' + (i + 1) + '</div><div class="v">' +
+      (done ? state.scores[i].reduce(function(s, v){ return s + v; }, 0) : "–") + '</div>';
+    chip.title = contractName(rr);
+    chip.addEventListener("click", function(){ openScore(i); });
+    strip.appendChild(chip);
+  });
+
+  $("btnScore").textContent = open === -1 ? "Partida terminada · revisar" : "Anotar ronda " + (shown + 1);
+  renderStatus();
+}
+
+/* =============================================================
+   Anotación
+============================================================= */
+function openScore(r){ sheetRound = r; openCalc = 0; renderEntries(); openSheet($("sheetScore")); }
+function renderEntries(){
+  var r = state.rounds[sheetRound];
+  $("scoreTitle").textContent = "Ronda " + (sheetRound + 1) + " · " + contractName(r);
+  $("scoreHint").innerHTML = "Suma las cartas que le quedaron en la mano a cada uno. Quien se fue a cero cierra la ronda — déjalo en <b>0</b>.";
+  var host = $("entries");
+  host.innerHTML = "";
+  state.players.forEach(function(name, i){
+    var wrap = el("div", "entry"), main = el("div", "entry-main");
+    var left = el("div"); left.style.minWidth = "0";
+    left.appendChild(el("div", "entry-name", esc(name)));
+    var sub = el("div", "entry-sub");
+    var calcBtn = el("button", "linky", "sumar cartas"); calcBtn.type = "button";
+    calcBtn.setAttribute("aria-pressed", String(openCalc === i));
+    var zero = el("button", "linky", "cerró · 0"); zero.type = "button";
+    sub.appendChild(calcBtn); sub.appendChild(zero);
+    left.appendChild(sub); main.appendChild(left);
+
+    var inp = el("input");
+    inp.type = "number"; inp.inputMode = "numeric"; inp.min = "0"; inp.placeholder = "0";
+    inp.value = state.scores[sheetRound][i] === null ? "" : state.scores[sheetRound][i];
+    inp.dataset.idx = String(i);
+    main.appendChild(inp);
+    wrap.appendChild(main);
+
+    calcBtn.addEventListener("click", function(){ openCalc = openCalc === i ? -1 : i; renderEntries(); });
+    zero.addEventListener("click", function(){ inp.value = "0"; inp.dispatchEvent(new Event("input")); });
+
+    if(openCalc === i){
+      var calc = el("div", "calc");
+      VALUE_LABELS.forEach(function(p){
+        var v = state.values[p[0]];
+        var b = el("button", null, esc(p[1]) + " <b>" + v + "</b>"); b.type = "button";
+        b.addEventListener("click", function(){
+          inp.value = String((parseInt(inp.value, 10) || 0) + v);
+          inp.dispatchEvent(new Event("input"));
+        });
+        calc.appendChild(b);
+      });
+      var clr = el("button", "clear", "borrar"); clr.type = "button";
+      clr.addEventListener("click", function(){ inp.value = ""; inp.dispatchEvent(new Event("input")); });
+      calc.appendChild(clr);
+      wrap.appendChild(calc);
+    }
+    inp.addEventListener("input", updateSum);
+    host.appendChild(wrap);
+  });
+  var sum = el("div", "sumline");
+  sum.innerHTML = '<span>Total de la ronda</span><b id="roundSum">0</b>';
+  host.appendChild(sum);
+  updateSum();
+}
+function updateSum(){
+  var inputs = $("entries").querySelectorAll("input[type=number]"), s = 0;
+  Array.prototype.forEach.call(inputs, function(i){ s += parseInt(i.value, 10) || 0; });
+  var node = $("roundSum");
+  if(node) node.textContent = String(s);
+}
+$("saveRound").addEventListener("click", function(){
+  /* Escribimos sólo las celdas de esta ronda sobre el estado más reciente,
+     así dos móviles anotando rondas distintas no se pisan. */
+  var inputs = $("entries").querySelectorAll("input[type=number]");
+  Array.prototype.forEach.call(inputs, function(inp){
+    var i = parseInt(inp.dataset.idx, 10), raw = inp.value.trim();
+    if(i >= state.players.length) return;
+    state.scores[sheetRound][i] = raw === "" ? null : Math.max(0, parseInt(raw, 10) || 0);
+  });
+  commit();
+  renderGame();
+  closeSheet($("sheetScore"));
+  if(firstOpenRound() === -1){
+    var tot = totals(), best = Math.min.apply(null, tot);
+    toast("Gana " + state.players[tot.indexOf(best)] + " con " + best);
+  }
+});
+
+/* =============================================================
+   Compartir
+============================================================= */
+function shareTarget(){
+  if(Net.room) return baseUrl() + "#r=" + Net.room;
+  return baseUrl() + "#g=" + b64e(JSON.stringify(state));
+}
+function renderShare(){
+  var url = shareTarget(), live = !!Net.room;
+  $("roomBox").hidden = !live;
+  $("roomBig").textContent = live ? Net.room : "";
+  $("shareLink").textContent = url;
+  $("qrCap").textContent = live
+    ? "Escanea con la cámara y entras directo a esta mesa."
+    : "Sin conexión: el QR lleva una copia del marcador tal y como está ahora.";
+  $("shareNote").innerHTML = live
+    ? "Todos los móviles de la mesa ven los cambios al momento. El código va por un servidor público de mensajería: no metas nada privado más allá de los nombres."
+    : "No hay conexión con el servidor de mesas. La app funciona igual en este móvil y el QR sirve para pasar el marcador a otro.";
+  var canvas = $("qr");
+  if(typeof QRious === "function"){
+    try{
+      new QRious({element:canvas, value:url, size:216, level:"M", background:"#ffffff", foreground:"#12211c"});
+      canvas.hidden = false;
+    }catch(e){ canvas.hidden = true; }
+  }else{ canvas.hidden = true; }
+  renderPeers();
+  openSheet($("sheetShare"));
+}
+function renderPeers(){
+  var host = $("peerList");
+  host.innerHTML = "";
+  if(!Net.room || Net.status !== "live"){
+    host.appendChild(el("span", "peer", "sólo este móvil"));
+    return;
+  }
+  host.appendChild(el("span", "peer me", esc(me.name || "tú") + " · tú"));
+  Object.keys(Net.peers).forEach(function(k){
+    host.appendChild(el("span", "peer", esc(Net.peers[k].name)));
+  });
+}
+$("copyLink").addEventListener("click", function(){
+  var url = shareTarget();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(
+      function(){ toast("Enlace copiado"); },
+      function(){ toast("Copia el enlace de abajo a mano"); });
+  }else{ toast("Copia el enlace de abajo a mano"); }
+});
+$("sysShare").addEventListener("click", function(){
+  var url = shareTarget();
+  if(navigator.share){
+    navigator.share({title:"Continental" + (Net.room ? " · mesa " + Net.room : ""), url:url}).catch(function(){});
+  }else{ $("copyLink").click(); }
+});
+
+/* =============================================================
+   Ajustes
+============================================================= */
+function renderSettings(){
+  $("setMyName").value = me.name;
+  $("setName").value = state.name;
+  var list = $("setPlayers");
+  list.innerHTML = "";
+  state.players.forEach(function(name, i){
+    var item = el("div", "pitem");
+    item.appendChild(el("div", "n", String(i + 1)));
+    var inp = el("input"); inp.type = "text"; inp.value = name;
+    inp.addEventListener("change", function(){
+      state.players[i] = inp.value; commit(); renderGame();
+    });
+    item.appendChild(inp);
+    var rm = el("button", "rm", "×"); rm.type = "button";
+    rm.disabled = state.players.length <= 2;
+    rm.addEventListener("click", function(){
+      state.players.splice(i, 1);
+      state.scores = state.scores.map(function(row){ row.splice(i, 1); return row; });
+      state.dealer = state.dealer % state.players.length;
+      commit(); renderSettings(); renderGame();
+    });
+    item.appendChild(rm);
+    list.appendChild(item);
+  });
+  var seg = $("setDealer");
+  seg.innerHTML = "";
+  state.players.forEach(function(name, i){
+    var b = el("button", null, esc(name)); b.type = "button";
+    b.setAttribute("aria-pressed", String(state.dealer === i));
+    b.addEventListener("click", function(){ state.dealer = i; commit(); renderSettings(); renderGame(); });
+    seg.appendChild(b);
+  });
+  renderValueEditor($("setValues"), state.values, function(){ commit(); });
+  renderRoundEditor($("setRounds"), state.rounds, function(){
+    normalizeScoreRows(); commit(); renderSettings(); renderGame();
+  });
+}
+$("setMyName").addEventListener("input", function(){
+  me.name = $("setMyName").value.trim();
+  try{ localStorage.setItem(KEY + ".name", me.name); }catch(e){}
+  Net.beat();
+});
+$("setName").addEventListener("change", function(){
+  state.name = $("setName").value; $("brandSub").textContent = state.name; commit();
+});
+$("setAddRound").addEventListener("click", function(){
+  state.rounds.push({t:1, e:1}); normalizeScoreRows(); commit(); renderSettings(); renderGame();
+});
+$("resetScores").addEventListener("click", function(){
+  if(!confirm("¿Borrar todos los puntos y empezar por la ronda 1?")) return;
+  state.scores = blankScores(state.rounds.length, state.players.length);
+  commit(); renderGame(); closeSheet($("sheetSettings"));
+  toast("Marcador a cero");
+});
+$("newGame").addEventListener("click", function(){
+  if(!confirm("¿Salir de esta mesa? El marcador sigue vivo para los demás.")) return;
+  draft.players = state.players.slice();
+  draft.rounds = state.rounds.map(function(r){ return {t:r.t, e:r.e}; });
+  draft.values = Object.assign({}, state.values);
+  draft.preset = "custom";
+  Net.leave();
+  state = null;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  setHash("");
+  closeSheet($("sheetSettings"));
+  showSetup();
+});
+
+/* =============================================================
+   Navegación entre pantallas
+============================================================= */
+function screen(which){
+  $("setup").hidden = which !== "setup";
+  $("lobby").hidden = which !== "lobby";
+  $("game").hidden = which !== "game";
+  $("dock").hidden = which !== "game";
+  $("btnSettings").hidden = which !== "game";
+}
+function showSetup(){
+  screen("setup");
+  $("brandSub").textContent = "marcador de mesa";
+  renderSetup(); renderStatus();
+}
+function showGame(){
+  screen("game");
+  if(Net.room) setHash("r=" + Net.room);
+  renderGame();
+}
+
+var lobbyTimer = null;
+function showLobby(code){
+  screen("lobby");
+  $("lobbyCode").textContent = code;
+  $("lobbyMsg").textContent = "Buscando la partida…";
+  $("lobbyCreate").hidden = true;
+  clearTimeout(lobbyTimer);
+  lobbyTimer = setTimeout(function(){
+    if($("lobby").hidden) return;
+    $("lobbyMsg").textContent = Net.status === "live"
+      ? "Esta mesa está vacía. Puedes crear aquí la partida y el resto entrará con el mismo código."
+      : "No hay forma de llegar al servidor de mesas desde esta red. Prueba con datos móviles en vez de la wifi.";
+    $("lobbyCreate").hidden = Net.status !== "live";
+  }, 4000);
+}
+$("lobbyBack").addEventListener("click", function(){
+  clearTimeout(lobbyTimer); Net.leave(); setHash(""); showSetup();
+});
+$("lobbyCreate").addEventListener("click", function(){
+  clearTimeout(lobbyTimer);
+  buildStateFromDraft();
+  commit();
+  showGame();
+});
+
+function buildStateFromDraft(){
+  var names = draft.players.map(function(n, i){ return (n || "").trim() || "Jugador " + (i + 1); });
+  state = {
+    v:2,
+    name:"Partida del " + new Date().toLocaleDateString("es-ES", {day:"numeric", month:"long"}),
+    players:names,
+    rounds:draft.rounds.map(function(r){ return {t:r.t, e:r.e}; }),
+    scores:blankScores(draft.rounds.length, names.length),
+    dealer:0,
+    values:Object.assign({}, draft.values),
+    rev:1, by:me.id, byName:me.name || ""
+  };
+}
+
+/* =============================================================
+   Arranque
+============================================================= */
+$("addPlayer").addEventListener("click", function(){
+  if(draft.players.length >= 12) return toast("Doce jugadores es el tope");
+  draft.players.push("");
+  renderSetup();
+  var inputs = $("setupPlayers").querySelectorAll("input");
+  inputs[inputs.length - 1].focus();
+});
+$("addRound").addEventListener("click", function(){
+  draft.rounds.push({t:1, e:1}); draft.preset = "custom"; renderSetup();
+});
+$("presetSeg").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-preset]");
+  if(!b) return;
+  draft.preset = b.dataset.preset;
+  draft.rounds = mkRounds(draft.preset);
+  renderSetup();
+});
+$("startGame").addEventListener("click", function(){
+  if(draft.players.length < 2) return toast("Hacen falta al menos dos jugadores");
+  buildStateFromDraft();
+  var code = roomCode();
+  Net.connect(code);
+  setHash("r=" + code);
+  saveLocal();
+  commit();
+  showGame();
+});
+$("btnJoin").addEventListener("click", joinFromInput);
+$("joinCode").addEventListener("keydown", function(e){ if(e.key === "Enter") joinFromInput(); });
+function joinFromInput(){
+  var code = ($("joinCode").value || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if(code.length < 4) return toast("El código son cinco letras");
+  join(code);
+}
+function join(code){
+  state = null;
+  Net.connect(code);
+  setHash("r=" + code);
+  showLobby(code);
+}
+$("btnStatus").addEventListener("click", function(){
+  if(state) renderShare();
+  else toast(Net.status === "live" ? "Mesa " + Net.room : "Sin conexión con el servidor de mesas");
+});
+$("btnShare2").addEventListener("click", renderShare);
+$("btnSettings").addEventListener("click", function(){ renderSettings(); openSheet($("sheetSettings")); });
+$("btnScore").addEventListener("click", function(){
+  var open = firstOpenRound();
+  openScore(open === -1 ? state.rounds.length - 1 : open);
+});
+
+(function boot(){
+  renderStatus();
+  var hash = location.hash || "";
+  var mRoom = hash.match(/[#&]r=([A-Za-z0-9]+)/);
+  var mState = hash.match(/[#&]g=([^&]+)/);
+
+  if(mRoom){
+    var code = mRoom[1].toUpperCase();
+    var saved = loadLocal();
+    if(saved && saved.room === code && saved.state){
+      state = saved.state;
+      Net.connect(code);
+      showGame();
+    }else{
+      join(code);
+    }
+    return;
+  }
+  if(mState){
+    try{
+      state = normalize(JSON.parse(b64d(mState[1])));
+      if(state){ saveLocal(); screen("game"); renderGame(); return; }
+    }catch(e){}
+  }
+  var s = loadLocal();
+  if(s && s.state){
+    state = s.state;
+    if(s.room){ Net.connect(s.room); showGame(); }
+    else{ screen("game"); renderGame(); }
+    return;
+  }
+  showSetup();
+})();
+
+window.addEventListener("beforeunload", function(){ saveLocal(); });
+})();
+</script>
+</body>
+</html>
