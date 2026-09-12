@@ -455,6 +455,8 @@ details.rules .body{padding:0 16px 16px;font-size:13.5px;color:var(--ink-2);line
       <div class="field">
         <label>Jugadores</label>
         <div class="plist" id="setPlayers"></div>
+        <button class="btn wide ghost" id="setAddPlayer" style="margin-top:8px">+ Añadir jugador</button>
+        <p class="hint" id="addPlayerHint" style="margin:2px 0 0"></p>
       </div>
       <div class="field">
         <label>Reparte primero</label>
@@ -1124,6 +1126,10 @@ function renderSettings(){
     item.appendChild(rm);
     list.appendChild(item);
   });
+  var np = state.players.length, nd = decksFor(np);
+  $("addPlayerHint").innerHTML = "Ahora sois <b>" + np + "</b>: hacen falta <b>" + nd +
+    " barajas</b>, " + (nd * 54) + " cartas con " + (nd * 2) + " comodines.";
+
   var seg = $("setDealer");
   seg.innerHTML = "";
   state.players.forEach(function(name, i){
@@ -1144,6 +1150,22 @@ $("setMyName").addEventListener("input", function(){
 });
 $("setName").addEventListener("change", function(){
   state.name = $("setName").value; $("brandSub").textContent = state.name; commit();
+});
+/* Un jugador que llega con la partida empezada entra con 0 en las rondas
+   ya cerradas; si en tu mesa se hace de otro modo, esas celdas se editan
+   tocando la ronda en la tira del marcador. */
+$("setAddPlayer").addEventListener("click", function(){
+  if(state.players.length >= 12) return toast("Doce jugadores es el tope");
+  var closed = state.rounds.map(function(_, i){ return roundDone(i); });
+  state.players.push("Jugador " + (state.players.length + 1));
+  state.scores.forEach(function(row, i){ row.push(closed[i] ? 0 : null); });
+  commit();
+  renderSettings();
+  renderGame();
+  var inputs = $("setPlayers").querySelectorAll("input");
+  var last = inputs[inputs.length - 1];
+  if(last){ last.focus(); last.select(); }
+  if(closed.some(Boolean)) toast("Entra con 0 en las rondas ya jugadas");
 });
 $("setAddRound").addEventListener("click", function(){
   state.rounds.push({t:1, e:1}); normalizeScoreRows(); commit(); renderSettings(); renderGame();
